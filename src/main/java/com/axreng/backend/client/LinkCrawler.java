@@ -1,47 +1,68 @@
 package com.axreng.backend.client;
 
+import com.axreng.backend.model.Task;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UrlVisitor {
+public class LinkCrawler {
+
+
+    private final Task task;
+
+    public LinkCrawler(final Task task) {
+        this.task = task;
+    }
 
     /**
      * Return the steps until find the term
-     * @param url
+     * @param link
      * @param term
-     * @return
-     * @throws IOException
+     * @return a link where was find the term or null when not found
      */
-    public List<String> searchTerm(final String url, final String term) throws IOException {
-        boolean deepDive = true;
-
-
-        return null;
+    public String searchTerm(final String link, final String term) {
+        return deepVisitLink(link, term);
     }
 
-    private void deepVisitLink(final String link, final String term) {
-        final List<String> deepLinks = visitList(link, term);
+    /**
+     * Return the link that the term was found
+     * @param link
+     * @param term
+     * @return
+     */
+    private String deepVisitLink(final String link, final String term) {
+        final String htmlContent = getContent(visit(link));
+        final List<String> deepLinks = getLink(htmlContent);
+        final String content = stripHtmlContent(htmlContent);
+
+        this.task.addUrl(link);
+
+        if(!content.isEmpty()) {
+            if(content.contains(term)) {
+                return link;
+            }
+        }
+
         if(!deepLinks.isEmpty()) {
             deepLinks.forEach(deepLink -> {
                 deepVisitLink(deepLink, term);
             });
         }
+
+        return null;
     }
 
-    private List<String> visitList(final String link,  final String term) {
-        final List<String> newLinksToVisit = new ArrayList<>();
-        URL objUrl;
+    private InputStream visit(final String link) {
+        final URL objUrl;
 
         try {
             objUrl = new URL(link);
@@ -51,27 +72,30 @@ public class UrlVisitor {
 
         try {
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
-
             urlConnection.setRequestMethod("GET");
-
-            final InputStream inputStream = urlConnection.getInputStream();
-            final String content = getContent(inputStream);
-
-            newLinksToVisit.addAll(getLink(content));
+            return urlConnection.getInputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return newLinksToVisit;
     }
 
-    private String getContent(final InputStream inputStreamContent) throws IOException {
+    /**
+     * Return the HTML content
+     *
+     * @param inputStreamContent
+     * @return strin with the HTML content
+     */
+    private String getContent(final InputStream inputStreamContent) {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamContent));
         final StringBuilder htmlContent = new StringBuilder();
         String content = "";
 
-        while ((content = bufferedReader.readLine()) != null) {
-            htmlContent.append(content);
+        try {
+            while ((content = bufferedReader.readLine()) != null) {
+                htmlContent.append(content);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return stripHtmlContent(htmlContent.toString());
@@ -88,6 +112,11 @@ public class UrlVisitor {
         return links;
     }
 
+    /**
+     * Stripe the HTML content and return just string text
+     * @param content
+     * @return string
+     */
     private String stripHtmlContent(final String content) {
         final String regex = "<[^>]*>";
         final Pattern pattern = Pattern.compile(regex);

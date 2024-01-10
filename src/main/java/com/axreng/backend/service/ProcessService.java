@@ -1,5 +1,7 @@
 package com.axreng.backend.service;
 
+import com.axreng.backend.client.LinkCrawler;
+import com.axreng.backend.config.Environment;
 import com.axreng.backend.database.EventDatabase;
 import com.axreng.backend.model.Task;
 import org.slf4j.Logger;
@@ -14,11 +16,19 @@ public class ProcessService {
 
     private final EventDatabase database;
 
+    private final String BASE_URL;
+
     public ProcessService() {
         this.database = EventDatabase.getInstance();
+        this.BASE_URL = System.getenv(Environment.BASE_URL);
     }
 
-    public Task newEvent(final String  term) {
+
+    public Task findTask(final UUID taskId) {
+        return database.get(taskId);
+    }
+
+    public Task newTask(final String  term) {
         log.info("Start a new task");
         final Task event = new Task(UUID.randomUUID(), term);
         createAsyncTask(event);
@@ -26,10 +36,16 @@ public class ProcessService {
         return event;
     }
 
-    private void createAsyncTask(final Task event) {
+    private void createAsyncTask(final Task task) {
         final CompletableFuture<Void> action = CompletableFuture.runAsync(() -> {
-            log.info("Start process");
+            final LinkCrawler urlVisitor = new LinkCrawler(task);
+
+            log.info("Starting process");
+            final String linkSearched = urlVisitor.searchTerm(BASE_URL, task.getSearchTerm());
+            task.setLinkResearchFind(linkSearched);
         });
-        event.setProcess(action);
+
+        task.setProcess(action);
     }
+
 }

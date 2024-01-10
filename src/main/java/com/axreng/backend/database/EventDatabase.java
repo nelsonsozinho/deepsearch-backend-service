@@ -11,7 +11,7 @@ public class EventDatabase {
 
     private static EventDatabase eventDatabase;
 
-    private Set<Task> events;
+    private final Set<Task> events;
 
     private EventDatabase() {
         this.events = new HashSet<>();
@@ -25,7 +25,6 @@ public class EventDatabase {
     }
 
     public UUID add(final Task event) {
-        event.setId(UUID.randomUUID());
         this.events.add(event);
         return event.getId();
     }
