@@ -51,7 +51,7 @@ public class Task implements Serializable {
         this.urlVisited = urlVisited;
     }
 
-    public void addUrl(final String url) {
+    public void addUrlVisited(final String url) {
         this.urlVisited.add(url);
     }
 

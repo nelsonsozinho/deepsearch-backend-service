@@ -30,7 +30,7 @@ public class EventDatabase {
     }
 
     public Task get(final UUID id) {
-        return events.stream().filter(e -> Objects.equals(e.getId(), id))
+        return events.stream().filter(e -> e.getId().equals(id))
                 .findAny()
                 .orElse(null);
     }

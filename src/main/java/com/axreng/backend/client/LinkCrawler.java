@@ -1,6 +1,9 @@
 package com.axreng.backend.client;
 
 import com.axreng.backend.model.Task;
+import com.axreng.backend.util.LinkUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.util.regex.Pattern;
 
 public class LinkCrawler {
 
+    private static Logger log = LoggerFactory.getLogger(LinkCrawler.class);
 
     private final Task task;
 
@@ -40,14 +44,30 @@ public class LinkCrawler {
      * @return
      */
     private String deepVisitLink(final String link, final String term) {
-        final String htmlContent = getContent(visit(link));
+        final String linkStriped = LinkUtils.stripeLink(link);
+
+
+        if(!LinkUtils.isLinkFromDomain(linkStriped)) {
+            log.info("Out of domain: " + linkStriped);
+            return null;
+        }
+
+        final String accurateLink = LinkUtils.accurateLink(linkStriped);
+        if(task.getUrlVisited().contains(accurateLink)) {
+            return "";
+        }
+
+        log.info("Visit link " + linkStriped);
+        final String htmlContent = getContent(visit(accurateLink));
+
         final List<String> deepLinks = getLink(htmlContent);
         final String content = stripHtmlContent(htmlContent);
 
-        this.task.addUrl(link);
+        this.task.addUrlVisited(accurateLink);
 
         if(!content.isEmpty()) {
             if(content.contains(term)) {
+                log.info("Process " + task.getId() + " find term in link " + accurateLink);
                 return link;
             }
         }
@@ -71,6 +91,7 @@ public class LinkCrawler {
         }
 
         try {
+
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             return urlConnection.getInputStream();
@@ -98,7 +119,7 @@ public class LinkCrawler {
             throw new RuntimeException(e);
         }
 
-        return stripHtmlContent(htmlContent.toString());
+        return htmlContent.toString();
     }
 
     private List<String> getLink(final String htmlContent) {

@@ -36,6 +36,7 @@ public class TaskController {
                     task.getProcess().isDone() ? "done" : "inactive");
 
             response.body(gson.toJson(responseTask));
+            return;
         }
 
         throw new TaskNotFoundException("Task with id " + id.toString() + " was not found");
