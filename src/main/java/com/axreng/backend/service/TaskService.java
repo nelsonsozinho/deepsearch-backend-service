@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class ProcessService {
+public class TaskService {
 
-    private final Logger log = LoggerFactory.getLogger(ProcessService.class);
+    private final Logger log = LoggerFactory.getLogger(TaskService.class);
 
     private final EventDatabase database;
 
     private final String BASE_URL;
 
-    public ProcessService() {
+    public TaskService() {
         this.database = EventDatabase.getInstance();
         this.BASE_URL = System.getenv(Environment.BASE_URL);
     }

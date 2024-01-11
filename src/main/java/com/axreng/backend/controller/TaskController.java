@@ -4,7 +4,7 @@ import com.axreng.backend.exception.TaskNotFoundException;
 import com.axreng.backend.model.Task;
 import com.axreng.backend.rest.RequestTask;
 import com.axreng.backend.rest.ResponseTask;
-import com.axreng.backend.service.ProcessService;
+import com.axreng.backend.service.TaskService;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
@@ -14,12 +14,12 @@ import java.util.UUID;
 
 public class TaskController {
 
-    private final ProcessService service;
+    private final TaskService service;
 
     private final Gson gson;
 
     public TaskController() {
-        this.service = new ProcessService();
+        this.service = new TaskService();
         this.gson = new Gson();
     }
 
