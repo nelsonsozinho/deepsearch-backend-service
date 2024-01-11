@@ -16,8 +16,11 @@ public class Main {
             return res.body();
         });
 
-        post("/crawl", (req, res) ->
-                "POST /crawl" + System.lineSeparator() + req.body());
+        post("/crawl", (req, res) -> {
+            var controller = new TaskController();
+            controller.postTask(req, res);
+            return res.body();
+        });
 
         exception(TaskNotFoundException.class, ((exception, request, response) -> {
             response.status(404);
