@@ -91,11 +91,13 @@ public class LinkCrawler {
         }
 
         try {
+            //two seconds of delay to void block ip request
+            Thread.sleep(2000);
 
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             return urlConnection.getInputStream();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

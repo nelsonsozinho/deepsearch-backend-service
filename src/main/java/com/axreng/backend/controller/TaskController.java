@@ -33,7 +33,7 @@ public class TaskController {
             ResponseTask responseTask = new ResponseTask(
                     task.getId().toString(),
                     task.getUrlVisited(),
-                    task.getProcess().isDone() ? "done" : "inactive");
+                    task.getProcess().isDone() ? "done" : "active");
 
             response.body(gson.toJson(responseTask));
             return;
