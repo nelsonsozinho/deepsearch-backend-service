@@ -1,7 +1,9 @@
 package com.axreng.backend;
 
 import com.axreng.backend.controller.TaskController;
+import com.axreng.backend.exception.SeartchTermException;
 import com.axreng.backend.exception.TaskNotFoundException;
+import com.google.gson.Gson;
 
 import static spark.Spark.exception;
 import static spark.Spark.get;
@@ -24,7 +26,14 @@ public class Main {
 
         exception(TaskNotFoundException.class, ((exception, request, response) -> {
             response.status(404);
-            response.body("");
+            response.type("application/json");
+            response.body("{ \"messge\": " + "\"" + exception.getMessage() + "\"}");
+        }));
+
+        exception(SeartchTermException.class, ((exception, request, response) -> {
+            response.status(400);
+            response.type("application/json");
+            response.body("{ \"messge\": " + "\"" + exception.getMessage() + "\"}");
         }));
     }
 }
