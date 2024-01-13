@@ -105,14 +105,15 @@ public class LinkCrawler {
      * Return the HTML content
      *
      * @param inputStreamContent
-     * @return strin with the HTML content
+     * @return string with the HTML content
      */
     private String getContent(final InputStream inputStreamContent) {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamContent));
         final StringBuilder htmlContent = new StringBuilder();
-        String content = "";
+
 
         try {
+            String content;
             while ((content = bufferedReader.readLine()) != null) {
                 htmlContent.append(content);
             }
@@ -133,19 +134,5 @@ public class LinkCrawler {
 
         return links;
     }
-
-    /**
-     * Stripe the HTML content and return just string text
-     * @param content
-     * @return string
-     */
-    private String stripHtmlContent(final String content) {
-        final String regex = "<[^>]*>";
-        final Pattern pattern = Pattern.compile(regex);
-        final Matcher matcher = pattern.matcher(content);
-        return matcher.replaceAll("");
-    }
-
-
 
 }
