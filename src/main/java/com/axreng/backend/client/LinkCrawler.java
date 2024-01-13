@@ -1,7 +1,7 @@
 package com.axreng.backend.client;
 
 import com.axreng.backend.model.Task;
-import com.axreng.backend.util.LinkUtils;
+import com.axreng.backend.utils.LinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

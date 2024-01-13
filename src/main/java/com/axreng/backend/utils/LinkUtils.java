@@ -1,4 +1,4 @@
-package com.axreng.backend.util;
+package com.axreng.backend.utils;
 
 import com.axreng.backend.config.Environment;
 
@@ -26,11 +26,7 @@ public class LinkUtils {
             return false;
         } else if(link.contains("ftp")) {
             return false;
-        } else if(link.contains("sftp")) {
-            return false;
-        } else {
-            return true;
-        }
+        } else return !link.contains("sftp");
     }
 
     public static String accurateLink(final String link) {
