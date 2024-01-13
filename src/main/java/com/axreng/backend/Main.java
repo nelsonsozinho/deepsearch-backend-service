@@ -3,7 +3,6 @@ package com.axreng.backend;
 import com.axreng.backend.controller.TaskController;
 import com.axreng.backend.exception.SeartchTermException;
 import com.axreng.backend.exception.TaskNotFoundException;
-import com.google.gson.Gson;
 
 import static spark.Spark.exception;
 import static spark.Spark.get;

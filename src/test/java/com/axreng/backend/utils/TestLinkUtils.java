@@ -1,7 +1,7 @@
 package com.axreng.backend.utils;
 
+import com.axreng.backend.config.Environment;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,6 +29,12 @@ public class TestLinkUtils {
     public void testLinkIsFromDomainDefined() {
         final String link = "http://hiring.axreng.com/manpages/strcmp.html";
         assertTrue(LinkUtils.isLinkFromDomain(link));
+    }
+
+    @Test
+    public void testGetLinkAccurate() {
+        final String link = "../strcmp.html";
+        assertEquals(Environment.DOMAIN + "strcmp.html", LinkUtils.accurateLink(link));
     }
 
 }

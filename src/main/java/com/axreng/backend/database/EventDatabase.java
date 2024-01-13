@@ -23,7 +23,7 @@ public class EventDatabase {
         return eventDatabase;
     }
 
-    public synchronized  UUID add(final Task event) {
+    public synchronized UUID add(final Task event) {
         this.events.add(event);
         return event.getId();
     }
