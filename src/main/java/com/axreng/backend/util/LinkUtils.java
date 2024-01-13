@@ -22,6 +22,12 @@ public class LinkUtils {
         final String linkCase = link.toLowerCase();
         if(linkCase.contains("http") ||  linkCase.contains("https")) {
             return linkCase.contains(Environment.DOMAIN);
+        } else if(link.contains("mailto")) {
+            return false;
+        } else if(link.contains("ftp")) {
+            return false;
+        } else if(link.contains("sftp")) {
+            return false;
         } else {
             return true;
         }
@@ -29,7 +35,8 @@ public class LinkUtils {
 
     public static String accurateLink(final String link) {
         if( !(link.contains("http") || link.contains("https")) ) {
-            return Environment.DOMAIN + link;
+            String cleanLink = link.replace("../", "");
+            return Environment.DOMAIN + cleanLink;
         }
 
         return link;

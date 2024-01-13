@@ -92,11 +92,12 @@ public class LinkCrawler {
 
         try {
             //two seconds of delay to void DOS
-            Thread.sleep(500);
+            Thread.sleep(100);
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             return urlConnection.getInputStream();
         } catch (IOException | InterruptedException e) {
+            log.error("Error on access page " + link, e);
             throw new RuntimeException(e);
         }
     }
