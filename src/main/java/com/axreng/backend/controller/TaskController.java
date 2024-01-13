@@ -19,7 +19,7 @@ public class TaskController {
 
     private final Gson gson;
 
-    public TaskController() {
+    public TaskController() throws Exception {
         this.service = new TaskService();
         this.gson = new Gson();
     }

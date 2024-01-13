@@ -24,12 +24,12 @@ public class EventDatabase {
         return eventDatabase;
     }
 
-    public UUID add(final Task event) {
+    public synchronized  UUID add(final Task event) {
         this.events.add(event);
         return event.getId();
     }
 
-    public Task get(final UUID id) {
+    public synchronized Task get(final UUID id) {
         return events.stream().filter(e -> e.getId().equals(id))
                 .findAny()
                 .orElse(null);

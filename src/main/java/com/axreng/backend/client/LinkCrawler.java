@@ -14,12 +14,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LinkCrawler {
 
-    private static Logger log = LoggerFactory.getLogger(LinkCrawler.class);
+    private static final Logger log = LoggerFactory.getLogger(LinkCrawler.class);
 
     private final Task task;
 
@@ -46,36 +47,35 @@ public class LinkCrawler {
     private String deepVisitLink(final String link, final String term) {
         final String linkStriped = LinkUtils.stripeLink(link);
 
-
         if(!LinkUtils.isLinkFromDomain(linkStriped)) {
             log.info("Out of domain: " + linkStriped);
             return null;
         }
 
+        //avoid to visit links visited
         final String accurateLink = LinkUtils.accurateLink(linkStriped);
         if(task.getUrlVisited().contains(accurateLink)) {
-            return "";
+            return link;
         }
 
         log.info("Visit link " + linkStriped);
         final String htmlContent = getContent(visit(accurateLink));
-
         final List<String> deepLinks = getLink(htmlContent);
-        final String content = stripHtmlContent(htmlContent);
-
         this.task.addUrlVisited(accurateLink);
 
-        if(!content.isEmpty()) {
-            if(content.contains(term)) {
+        if(!htmlContent.isEmpty()) {
+            if(htmlContent.contains(term)) {
                 log.info("Process " + task.getId() + " find term in link " + accurateLink);
-                return link;
+                this.task.setLinkResearchFind(link);
             }
         }
 
         if(!deepLinks.isEmpty()) {
-            deepLinks.forEach(deepLink -> {
-                deepVisitLink(deepLink, term);
-            });
+            for(var deepLink : deepLinks) {
+                if(Objects.isNull(task.getLinkResearchFind())) {
+                    deepVisitLink(deepLink, term);
+                }
+            }
         }
 
         return null;
@@ -91,9 +91,8 @@ public class LinkCrawler {
         }
 
         try {
-            //two seconds of delay to void block ip request
-            Thread.sleep(2000);
-
+            //two seconds of delay to void DOS
+            Thread.sleep(500);
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             return urlConnection.getInputStream();
@@ -146,5 +145,7 @@ public class LinkCrawler {
         final Matcher matcher = pattern.matcher(content);
         return matcher.replaceAll("");
     }
+
+
 
 }

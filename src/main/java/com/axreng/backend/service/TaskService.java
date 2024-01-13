@@ -18,7 +18,7 @@ public class TaskService {
 
     private final String BASE_URL;
 
-    public TaskService() {
+    public TaskService() throws Exception {
         this.database = EventDatabase.getInstance();
         this.BASE_URL = System.getenv(Environment.BASE_URL);
     }
