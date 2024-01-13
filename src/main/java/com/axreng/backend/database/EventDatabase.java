@@ -3,7 +3,6 @@ package com.axreng.backend.database;
 import com.axreng.backend.model.Task;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,10 +32,6 @@ public class EventDatabase {
         return events.stream().filter(e -> e.getId().equals(id))
                 .findAny()
                 .orElse(null);
-    }
-
-    public void remove(final UUID id) {
-        this.events.remove(this.get(id));
     }
 
 }
