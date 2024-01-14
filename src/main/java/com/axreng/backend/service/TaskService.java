@@ -20,7 +20,7 @@ public class TaskService {
 
     public TaskService() throws Exception {
         this.database = EventDatabase.getInstance();
-        this.BASE_URL = System.getenv(Environment.BASE_URL);
+        this.BASE_URL = Environment.DOMAIN;
     }
 
 

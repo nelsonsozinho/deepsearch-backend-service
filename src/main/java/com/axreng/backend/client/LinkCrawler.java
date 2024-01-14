@@ -1,6 +1,9 @@
 package com.axreng.backend.client;
 
+import com.axreng.backend.config.Environment;
+import com.axreng.backend.model.Robots;
 import com.axreng.backend.model.Task;
+import com.axreng.backend.parser.RobotsParser;
 import com.axreng.backend.utils.LinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,8 +24,15 @@ public class LinkCrawler {
 
     private final Task task;
 
+    private final UrlVisitor visitor;
+
+    private Robots robots;
+
+
     public LinkCrawler(final Task task) {
+        this.visitor = new UrlVisitor();
         this.task = task;
+        this.configRobots();
     }
 
     /**
@@ -58,8 +65,15 @@ public class LinkCrawler {
             return link;
         }
 
-        log.info("Visit link " + linkStriped);
-        final String htmlContent = getContent(visit(accurateLink));
+        //validate robot content
+        if(!robotCanGo(accurateLink)) {
+            return null;
+        }
+
+        final String htmlContent = getContent(
+                visitor.visit(
+                        accurateLink,
+                        robots.getCrawlDelay() == null ? Environment.DELAY : robots.getCrawlDelay()));
         final List<String> deepLinks = getLink(htmlContent);
         this.task.addUrlVisited(accurateLink);
 
@@ -81,27 +95,6 @@ public class LinkCrawler {
         return null;
     }
 
-    private InputStream visit(final String link) {
-        final URL objUrl;
-
-        try {
-            objUrl = new URL(link);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            //two seconds of delay to void DOS
-            Thread.sleep(100);
-            final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
-            urlConnection.setRequestMethod("GET");
-            return urlConnection.getInputStream();
-        } catch (IOException | InterruptedException e) {
-            log.error("Error on access page " + link, e);
-            throw new RuntimeException(e);
-        }
-    }
-
     /**
      * Return the HTML content
      *
@@ -111,7 +104,6 @@ public class LinkCrawler {
     private String getContent(final InputStream inputStreamContent) {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamContent));
         final StringBuilder htmlContent = new StringBuilder();
-
 
         try {
             String content;
@@ -134,6 +126,16 @@ public class LinkCrawler {
         }
 
         return links;
+    }
+
+    private void configRobots() {
+        log.info("Config robots.txt");
+        final RobotsParser parser = new RobotsParser();
+        this.robots = parser.parserRobots();
+    }
+
+    public boolean robotCanGo(final String accurateLink) {
+        return this.robots.getDisallows().stream().noneMatch(accurateLink::contains);
     }
 
 }
