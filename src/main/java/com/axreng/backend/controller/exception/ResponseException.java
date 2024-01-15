@@ -1,4 +1,4 @@
-package com.axreng.backend.exception;
+package com.axreng.backend.controller.exception;
 
 public class ResponseException extends Exception {
 

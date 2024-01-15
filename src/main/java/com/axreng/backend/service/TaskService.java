@@ -1,8 +1,8 @@
 package com.axreng.backend.service;
 
-import com.axreng.backend.client.LinkCrawler;
-import com.axreng.backend.config.Environment;
-import com.axreng.backend.database.EventDatabase;
+import com.axreng.backend.engine.crawler.LinkCrawler;
+import com.axreng.backend.engine.config.Environment;
+import com.axreng.backend.engine.database.EventDatabase;
 import com.axreng.backend.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

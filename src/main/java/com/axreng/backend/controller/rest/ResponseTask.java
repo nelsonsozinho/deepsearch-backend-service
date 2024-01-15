@@ -1,4 +1,4 @@
-package com.axreng.backend.rest;
+package com.axreng.backend.controller.rest;
 
 import java.io.Serializable;
 import java.util.List;

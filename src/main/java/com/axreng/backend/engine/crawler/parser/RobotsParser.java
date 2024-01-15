@@ -1,7 +1,7 @@
-package com.axreng.backend.parser;
+package com.axreng.backend.engine.crawler.parser;
 
-import com.axreng.backend.client.UrlVisitor;
-import com.axreng.backend.config.Environment;
+import com.axreng.backend.engine.crawler.UrlVisitor;
+import com.axreng.backend.engine.config.Environment;
 import com.axreng.backend.model.Robots;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

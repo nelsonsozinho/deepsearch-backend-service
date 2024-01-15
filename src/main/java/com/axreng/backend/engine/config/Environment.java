@@ -1,4 +1,4 @@
-package com.axreng.backend.config;
+package com.axreng.backend.engine.config;
 
 import java.util.Objects;
 

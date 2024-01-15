@@ -1,10 +1,10 @@
 package com.axreng.backend.controller;
 
-import com.axreng.backend.exception.SeartchTermException;
-import com.axreng.backend.exception.TaskNotFoundException;
+import com.axreng.backend.controller.exception.SeartchTermException;
+import com.axreng.backend.controller.exception.TaskNotFoundException;
 import com.axreng.backend.model.Task;
-import com.axreng.backend.rest.RequestTask;
-import com.axreng.backend.rest.ResponseTask;
+import com.axreng.backend.controller.rest.RequestTask;
+import com.axreng.backend.controller.rest.ResponseTask;
 import com.axreng.backend.service.TaskService;
 import com.google.gson.Gson;
 import spark.Request;

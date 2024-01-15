@@ -1,6 +1,6 @@
-package com.axreng.backend.client;
+package com.axreng.backend.engine.crawler;
 
-import com.axreng.backend.config.Environment;
+import com.axreng.backend.engine.config.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

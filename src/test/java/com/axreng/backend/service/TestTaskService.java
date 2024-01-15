@@ -1,6 +1,6 @@
 package com.axreng.backend.service;
 
-import com.axreng.backend.database.EventDatabase;
+import com.axreng.backend.engine.database.EventDatabase;
 import com.axreng.backend.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

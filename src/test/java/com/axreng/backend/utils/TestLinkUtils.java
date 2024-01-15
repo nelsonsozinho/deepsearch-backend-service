@@ -1,6 +1,6 @@
 package com.axreng.backend.utils;
 
-import com.axreng.backend.config.Environment;
+import com.axreng.backend.engine.config.Environment;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
