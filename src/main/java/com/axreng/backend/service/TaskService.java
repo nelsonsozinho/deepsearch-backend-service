@@ -4,6 +4,7 @@ import com.axreng.backend.engine.crawler.LinkCrawler;
 import com.axreng.backend.engine.config.Environment;
 import com.axreng.backend.engine.database.EventDatabase;
 import com.axreng.backend.model.Task;
+import com.axreng.backend.utils.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +25,13 @@ public class TaskService {
     }
 
 
-    public Task findTask(final UUID taskId) {
+    public Task findTask(final String taskId) {
         return database.get(taskId);
     }
 
     public Task newTask(final String  term) {
         log.info("Start a new task");
-        final Task event = new Task(UUID.randomUUID(), term);
+        final Task event = new Task(IdUtils.generateId(), term);
         createAsyncTask(event);
         this.database.add(event);
         return event;

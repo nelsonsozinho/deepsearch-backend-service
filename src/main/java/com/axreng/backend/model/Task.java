@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class Task implements Serializable {
 
-    private final UUID id;
+    private final String id;
 
     private final String searchTerm;
 
@@ -21,13 +21,13 @@ public class Task implements Serializable {
 
 
 
-    public Task(final UUID id, final String searchTerm) {
+    public Task(final String id, final String searchTerm) {
         this.id = id;
         this.searchTerm = searchTerm;
         this.urlVisited = new ArrayList<>();
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 

@@ -25,14 +25,14 @@ public class TaskController {
     }
 
     public void getTask(final Request request, final Response response) throws TaskNotFoundException {
-        final UUID id = UUID.fromString(request.params(":id"));
+        final String id = request.params(":id");
         final Task task = service.findTask(id);
 
         response.type("application/json");
 
         if(Objects.nonNull(task)) {
             ResponseTask responseTask = new ResponseTask(
-                    task.getId().toString(),
+                    task.getId(),
                     task.getUrlVisited(),
                     task.getProcess().isDone() ? "done" : "active");
 
@@ -40,7 +40,7 @@ public class TaskController {
             return;
         }
 
-        throw new TaskNotFoundException("Task with id " + id.toString() + " not found");
+        throw new TaskNotFoundException("Task with id " + id + " not found");
     }
 
     public void postTask(final Request request, final Response response) throws SeartchTermException {

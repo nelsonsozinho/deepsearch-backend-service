@@ -4,7 +4,6 @@ import com.axreng.backend.model.Task;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class EventDatabase {
 
@@ -23,12 +22,12 @@ public class EventDatabase {
         return eventDatabase;
     }
 
-    public synchronized UUID add(final Task event) {
+    public synchronized String add(final Task event) {
         this.events.add(event);
         return event.getId();
     }
 
-    public synchronized Task get(final UUID id) {
+    public synchronized Task get(final String id) {
         return events.stream().filter(e -> e.getId().equals(id))
                 .findAny()
                 .orElse(null);
