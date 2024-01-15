@@ -35,7 +35,7 @@ public class UrlVisitor {
             final HttpURLConnection urlConnection = (HttpURLConnection) objUrl.openConnection();
             final int responseCode = urlConnection.getResponseCode();
 
-            log.info("Visit link " + link + ". Response: " + responseCode);
+            log.info(Thread.currentThread().getName() + " visit link " + link + ". Response: " + responseCode);
 
             if(responseCode == HttpURLConnection.HTTP_OK) {
                 return urlConnection.getInputStream();
