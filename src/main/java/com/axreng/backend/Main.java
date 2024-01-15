@@ -1,6 +1,7 @@
 package com.axreng.backend;
 
 import com.axreng.backend.controller.TaskController;
+import com.axreng.backend.controller.exception.IdValidateException;
 import com.axreng.backend.controller.exception.SeartchTermException;
 import com.axreng.backend.controller.exception.TaskNotFoundException;
 
@@ -30,6 +31,12 @@ public class Main {
         }));
 
         exception(SeartchTermException.class, ((exception, request, response) -> {
+            response.status(400);
+            response.type("application/json");
+            response.body("{ \"messge\": " + "\"" + exception.getMessage() + "\"}");
+        }));
+
+        exception(IdValidateException.class, ((exception, request, response) -> {
             response.status(400);
             response.type("application/json");
             response.body("{ \"messge\": " + "\"" + exception.getMessage() + "\"}");
