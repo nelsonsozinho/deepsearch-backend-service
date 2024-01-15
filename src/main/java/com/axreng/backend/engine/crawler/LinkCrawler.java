@@ -1,22 +1,15 @@
 package com.axreng.backend.engine.crawler;
 
 import com.axreng.backend.engine.config.Environment;
+import com.axreng.backend.engine.crawler.parser.RobotsParser;
 import com.axreng.backend.model.Robots;
 import com.axreng.backend.model.Task;
-import com.axreng.backend.engine.crawler.parser.RobotsParser;
 import com.axreng.backend.utils.LinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LinkCrawler {
 
@@ -70,11 +63,11 @@ public class LinkCrawler {
             return null;
         }
 
-        final String htmlContent = getContent(
+        final String htmlContent = LinkUtils.getContent(
                 visitor.visit(
                         accurateLink,
                         robots.getCrawlDelay() == null ? Environment.DELAY : robots.getCrawlDelay()));
-        final List<String> deepLinks = getLink(htmlContent);
+        final List<String> deepLinks = LinkUtils.getLink(htmlContent);
         this.task.addUrlVisited(accurateLink);
 
         if(!htmlContent.isEmpty()) {
@@ -93,39 +86,6 @@ public class LinkCrawler {
         }
 
         return null;
-    }
-
-    /**
-     * Return the HTML content
-     *
-     * @param inputStreamContent
-     * @return string with the HTML content
-     */
-    private String getContent(final InputStream inputStreamContent) {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamContent));
-        final StringBuilder htmlContent = new StringBuilder();
-
-        try {
-            String content;
-            while ((content = bufferedReader.readLine()) != null) {
-                htmlContent.append(content);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return htmlContent.toString();
-    }
-
-    private List<String> getLink(final String htmlContent) {
-        final List<String> links = new ArrayList<>();
-        final Matcher matcher = Pattern.compile("<a\\s+[^>]*href\\s*=\\s*\"([^\"]*)\"[^>]*>").matcher(htmlContent);
-
-        while(matcher.find()) {
-            links.add(matcher.group());
-        }
-
-        return links;
     }
 
     private void configRobots() {
