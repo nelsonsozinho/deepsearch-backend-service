@@ -35,7 +35,7 @@ public class TaskController {
         if(Objects.nonNull(task)) {
             ResponseTask responseTask = new ResponseTask(
                     task.getId(),
-                    task.getUrlVisited(),
+                    task.getLinkResearchFind(),
                     task.getProcess().isDone() ? "done" : "active");
 
             response.body(gson.toJson(responseTask));

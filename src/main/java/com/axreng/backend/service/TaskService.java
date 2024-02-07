@@ -1,14 +1,13 @@
 package com.axreng.backend.service;
 
-import com.axreng.backend.engine.crawler.LinkCrawler;
 import com.axreng.backend.engine.config.Environment;
+import com.axreng.backend.engine.crawler.LinkCrawler;
 import com.axreng.backend.engine.database.EventDatabase;
 import com.axreng.backend.model.Task;
 import com.axreng.backend.utils.IdUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class TaskService {
@@ -42,8 +41,8 @@ public class TaskService {
             final LinkCrawler urlVisitor = new LinkCrawler(task);
 
             log.info("Starting process");
-            final String linkSearched = urlVisitor.searchTerm(BASE_URL, task.getSearchTerm());
-            task.setLinkResearchFind(linkSearched);
+            urlVisitor.searchTerm(BASE_URL, task.getSearchTerm());
+//            task.addLinkResearchFind(linkSearched);
         });
 
         task.setProcess(action);

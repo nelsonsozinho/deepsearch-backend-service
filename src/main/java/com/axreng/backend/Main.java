@@ -31,8 +31,7 @@ public class Main {
         }));
 
         exception(SeartchTermException.class, ((exception, request, response) -> {
-            response.status(400);
-            response.type("application/json");
+            response.status(400);            response.type("application/json");
             response.body("{ \"messge\": " + "\"" + exception.getMessage() + "\"}");
         }));
 

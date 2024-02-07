@@ -55,6 +55,7 @@ public class LinkCrawler {
         //avoid to visit links visited
         final String accurateLink = LinkUtils.accurateLink(linkStriped);
         if(task.getUrlVisited().contains(accurateLink)) {
+            log.info("Link " + accurateLink + " already visited!");
             return link;
         }
 
@@ -73,15 +74,13 @@ public class LinkCrawler {
         if(!htmlContent.isEmpty()) {
             if(htmlContent.contains(term)) {
                 log.info("Process " + task.getId() + " find term in link " + accurateLink);
-                this.task.setLinkResearchFind(link);
+                this.task.addLinkResearchFind(accurateLink);
             }
         }
 
         if(!deepLinks.isEmpty()) {
             for(var deepLink : deepLinks) {
-                if(Objects.isNull(task.getLinkResearchFind())) {
-                    deepVisitLink(deepLink, term);
-                }
+                deepVisitLink(deepLink, term);
             }
         }
 

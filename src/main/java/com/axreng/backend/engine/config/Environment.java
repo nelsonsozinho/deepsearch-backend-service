@@ -10,6 +10,6 @@ public class Environment {
 
     public static final String DOMAIN = Objects.nonNull(System.getenv(BASE_URL)) ? System.getenv(BASE_URL) : AXRENG_URL;
 
-    public static final Long DELAY = 500L;
+    public static final Long DELAY = 0L;
 
 }

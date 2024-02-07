@@ -13,9 +13,9 @@ public class Task implements Serializable {
 
     private final String searchTerm;
 
-    private String linkResearchFind;
+    private final List<String> linkResearchFind;
 
-    private List<String> urlVisited;
+    private final List<String> urlVisited;
 
     private CompletableFuture<Void> process;
 
@@ -25,6 +25,7 @@ public class Task implements Serializable {
         this.id = id;
         this.searchTerm = searchTerm;
         this.urlVisited = new ArrayList<>();
+        this.linkResearchFind = new ArrayList<>();
     }
 
     public String getId() {
@@ -47,19 +48,15 @@ public class Task implements Serializable {
         return urlVisited;
     }
 
-    public void setUrlVisited(List<String> urlVisited) {
-        this.urlVisited = urlVisited;
-    }
-
     public void addUrlVisited(final String url) {
         this.urlVisited.add(url);
     }
 
-    public String getLinkResearchFind() {
+    public List<String> getLinkResearchFind() {
         return linkResearchFind;
     }
 
-    public void setLinkResearchFind(String linkResearchFind) {
-        this.linkResearchFind = linkResearchFind;
+    public void addLinkResearchFind(String linkResearchFind) {
+        this.linkResearchFind.add(linkResearchFind);
     }
 }
