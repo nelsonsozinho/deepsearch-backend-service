@@ -2,7 +2,7 @@ package com.axreng.backend.service;
 
 import com.axreng.backend.engine.config.Environment;
 import com.axreng.backend.engine.crawler.LinkCrawler;
-import com.axreng.backend.engine.database.EventDatabase;
+import com.axreng.backend.engine.database.EventRepositoryConcrete;
 import com.axreng.backend.model.Task;
 import com.axreng.backend.utils.IdUtils;
 import org.slf4j.Logger;
@@ -14,18 +14,18 @@ public class TaskService {
 
     private final Logger log = LoggerFactory.getLogger(TaskService.class);
 
-    private final EventDatabase database;
+    private final EventRepositoryConcrete database;
 
     private final String BASE_URL;
 
     public TaskService() throws Exception {
-        this.database = EventDatabase.getInstance();
+        this.database = EventRepositoryConcrete.getInstance();
         this.BASE_URL = Environment.DOMAIN;
     }
 
 
     public Task findTask(final String taskId) {
-        return database.get(taskId);
+        return database.findById(taskId);
     }
 
     public Task newTask(final String  term) {
@@ -42,7 +42,6 @@ public class TaskService {
 
             log.info("Starting process");
             urlVisitor.searchTerm(BASE_URL, task.getSearchTerm());
-//            task.addLinkResearchFind(linkSearched);
         });
 
         task.setProcess(action);

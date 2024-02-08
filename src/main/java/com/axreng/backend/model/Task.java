@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 
-public class Task implements Serializable {
+public class Task implements Entity {
 
     private final String id;
 

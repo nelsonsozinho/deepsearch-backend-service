@@ -3,16 +3,26 @@ package com.axreng.backend.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Link implements Serializable {
+public class Link implements Entity {
+
+    private String id;
 
     private final String link;
     private String htmlContent;
-    private String strippedContent;
 
     private LocalDateTime updatedTime;
 
     public Link(final String link) {
         this.link = link;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getHtmlContent() {
@@ -21,14 +31,6 @@ public class Link implements Serializable {
 
     public void setHtmlContent(String htmlContent) {
         this.htmlContent = htmlContent;
-    }
-
-    public String getStrippedContent() {
-        return strippedContent;
-    }
-
-    public void setStrippedContent(String strippedContent) {
-        this.strippedContent = strippedContent;
     }
 
     public LocalDateTime getUpdatedTime() {
