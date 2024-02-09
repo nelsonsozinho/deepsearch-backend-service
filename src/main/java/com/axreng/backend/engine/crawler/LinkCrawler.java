@@ -2,6 +2,9 @@ package com.axreng.backend.engine.crawler;
 
 import com.axreng.backend.engine.config.Environment;
 import com.axreng.backend.engine.crawler.parser.RobotsParser;
+import com.axreng.backend.engine.database.LinkRepository;
+import com.axreng.backend.engine.database.LinkRepositoryConcrete;
+import com.axreng.backend.model.Link;
 import com.axreng.backend.model.Robots;
 import com.axreng.backend.model.Task;
 import com.axreng.backend.utils.LinkUtils;
@@ -19,11 +22,14 @@ public class LinkCrawler {
 
     private final UrlVisitor visitor;
 
+    private final LinkRepository linkRepository;
+
     private Robots robots;
 
 
     public LinkCrawler(final Task task) {
         this.visitor = new UrlVisitor();
+        this.linkRepository = LinkRepositoryConcrete.getInstance();
         this.task = task;
         this.configRobots();
     }
@@ -64,10 +70,7 @@ public class LinkCrawler {
             return null;
         }
 
-        final String htmlContent = LinkUtils.getContent(
-                visitor.visit(
-                        accurateLink,
-                        robots.getCrawlDelay() == null ? Environment.DELAY : robots.getCrawlDelay()));
+        final String htmlContent = this.getLinkContent(accurateLink);
         final List<String> deepLinks = LinkUtils.getLink(htmlContent);
         this.task.addUrlVisited(accurateLink);
 
@@ -87,6 +90,24 @@ public class LinkCrawler {
         return null;
     }
 
+    private String getLinkContent(final String accurateLink) {
+        final Link link = this.linkRepository.findByUrl(accurateLink);
+
+        if(Objects.isNull(link)) {
+            var content = LinkUtils.getContent(
+                    visitor.visit(
+                            accurateLink,
+                            robots.getCrawlDelay() == null ? Environment.DELAY : robots.getCrawlDelay()));
+            var newLink = new Link(accurateLink, content);
+            this.linkRepository.add(newLink);
+            log.info("Save url in database: " + accurateLink);
+            return content;
+        }
+
+        log.info("Url " + accurateLink + " get from the database");
+        return link.getHtmlContent();
+    }
+
     private void configRobots() {
         log.info("Config robots.txt");
         final RobotsParser parser = new RobotsParser();
@@ -95,6 +116,11 @@ public class LinkCrawler {
 
     public boolean robotCanGo(final String accurateLink) {
         return this.robots.getDisallows().stream().noneMatch(accurateLink::contains);
+    }
+
+    private void fillAndSaveLinks(final String link, final String content) {
+        final Link linkObj = new Link(link, content);
+        this.linkRepository.add(linkObj);
     }
 
 }

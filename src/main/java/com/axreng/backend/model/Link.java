@@ -2,18 +2,23 @@ package com.axreng.backend.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Link implements Entity {
 
     private String id;
-
     private final String link;
     private String htmlContent;
-
     private LocalDateTime updatedTime;
 
-    public Link(final String link) {
+    public Link(
+            final String link,
+            final String htmlContent
+    ) {
         this.link = link;
+        this.htmlContent = htmlContent;
+        this.updatedTime = LocalDateTime.now();
+        this.id = UUID.randomUUID().toString();
     }
 
 
