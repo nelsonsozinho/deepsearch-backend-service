@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.axreng</groupId>
-    <artifactId>backend-test</artifactId>
+    <artifactId>deepsearch-backend-service</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
